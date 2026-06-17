@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import './index.css';
 import {
   GoogleMap,
   Marker,
@@ -41,10 +42,11 @@ useEffect(() => {
   if (!isLoaded) return <h1>Loading Map...</h1>;
 
   return (
+    <>
     <GoogleMap
       mapContainerStyle={{
-        width: "100%",
-        height: "100vh",
+        width: "50%",
+        height: "50vh",
       }}
       center={carPosition}
       zoom={15}
@@ -64,5 +66,8 @@ useEffect(() => {
         }}
       />
     </GoogleMap>
+     <div className="h-screen flex items-center justify-center">wfhbh</div>
+    </>
+
   );
 }
