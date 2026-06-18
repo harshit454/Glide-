@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AuthContainer } from "./components/loginSignUp/auth-container";
 import './index.css';
 import {
   GoogleMap,
@@ -6,6 +7,7 @@ import {
   Polyline,
   useJsApiLoader,
 } from "@react-google-maps/api";
+
 const route = [
   { lat: 28.6139, lng: 77.2090 }, 
   { lat: 28.6155, lng: 77.2150 },
@@ -16,58 +18,72 @@ const route = [
 ];
 
 export default function App() {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-  });
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [carPosition, setCarPosition] = useState(route[0]);
 
-useEffect(() => {
-  let currentIndex = 0;
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
+  });
 
-  const timer = setInterval(() => {
-    currentIndex++;
+  useEffect(() => {
+    // Only run the map car animation if the user has successfully logged in
+    if (!isAuthenticated) return;
 
-    if (currentIndex >= route.length) {
-      clearInterval(timer); 
-      return;
-    }
+    let currentIndex = 0;
+    const timer = setInterval(() => {
+      currentIndex++;
 
-    setCarPosition(route[currentIndex]);
-  }, 1000);
+      if (currentIndex >= route.length) {
+        clearInterval(timer); 
+        return;
+      }
 
-  return () => clearInterval(timer);
-}, []);
+      setCarPosition(route[currentIndex]);
+    }, 1000);
 
-  if (!isLoaded) return <h1>Loading Map...</h1>;
+    return () => clearInterval(timer);
+  }, [isAuthenticated]);
+
+  // Step 1: If user is not authenticated, show the Login / Signup screen
+  if (!isAuthenticated) {
+    return <AuthContainer onAuthSuccess={() => setIsAuthenticated(true)} />;
+  }
+
+  // Step 2: Once authenticated, load the tracking map dashboard
+  if (!isLoaded) return <h1 className="p-8 text-xl font-bold">Loading Map...</h1>;
 
   return (
-    <>
-    <GoogleMap
-      mapContainerStyle={{
-        width: "50%",
-        height: "50vh",
-      }}
-      center={carPosition}
-      zoom={15}
-    >
-      <Polyline
-        path={route}
-        options={{
-          strokeColor: "#4285F4",
-          strokeWeight: 5,
-        }}
-      />
+    <div className="w-full h-screen flex flex-col items-center justify-center bg-slate-50 p-4">
+      <div className="w-full max-w-4xl bg-white p-6 rounded-3xl shadow-xl border border-slate-100">
+        <h1 className="text-2xl font-bold text-slate-800 mb-4">Glide Live Tracking Dashboard</h1>
+        
+        <div className="w-full rounded-2xl overflow-hidden border border-slate-200">
+          <GoogleMap
+            mapContainerStyle={{
+              width: "100%",
+              height: "60vh",
+            }}
+            center={carPosition}
+            zoom={15}
+          >
+            <Polyline
+              path={route}
+              options={{
+                strokeColor: "#2563eb",
+                strokeWeight: 5,
+              }}
+            />
 
-      <Marker
-        position={carPosition}
-        icon={{
-          url: "https://cdn-icons-png.flaticon.com/512/744/744465.png",
-        }}
-      />
-    </GoogleMap>
-     <div className="h-screen flex items-center justify-center">wfhbh</div>
-    </>
-
+            <Marker
+              position={carPosition}
+              icon={{
+                url: "https://cdn-icons-png.flaticon.com/512/744/744465.png",
+                scaledSize: new window.google.maps.Size(40, 40)
+              }}
+            />
+          </GoogleMap>
+        </div>
+      </div>
+    </div>
   );
 }

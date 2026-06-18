@@ -1,8 +1,4 @@
-
-"use client"
-
 import React, { useState, useEffect, useRef } from 'react';
-import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2, CheckCircle2 } from 'lucide-react';
 
 interface OtpStepProps {
@@ -47,7 +43,6 @@ export function OtpStep({ phoneNumber, onBack, onVerify }: OtpStepProps) {
     const code = otp.join('');
     if (code.length === 6) {
       setIsVerifying(true);
-      // Simulate API call
       setTimeout(() => {
         setIsVerifying(false);
         setIsSuccess(true);
@@ -60,11 +55,13 @@ export function OtpStep({ phoneNumber, onBack, onVerify }: OtpStepProps) {
     setTimer(30);
   };
 
+  const isOtpComplete = otp.join('').length === 6;
+
   return (
-    <div className="w-full flex flex-col space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+    <div className="w-full flex flex-col space-y-8">
       <button 
         onClick={onBack}
-        className="self-start flex items-center gap-2 text-slate-400 font-medium hover:text-primary transition-colors mb-2"
+        className="self-start flex items-center gap-2 text-slate-400 font-medium hover:text-blue-600 transition-colors mb-2"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to edit number
@@ -81,23 +78,27 @@ export function OtpStep({ phoneNumber, onBack, onVerify }: OtpStepProps) {
         {otp.map((digit, i) => (
           <input
             key={i}
-            ref={el => inputRefs.current[i] = el}
+            ref={el => { inputRefs.current[i] = el; }}
             type="text"
             inputMode="numeric"
             value={digit}
             onChange={e => handleChange(i, e.target.value)}
             onKeyDown={e => handleKeyDown(i, e)}
-            className="w-full h-16 text-center text-2xl font-bold border-2 border-slate-100 rounded-2xl bg-slate-50 focus:border-primary focus:ring-4 focus:ring-primary/5 focus:bg-white transition-all outline-none"
+            className="w-full h-16 text-center text-2xl font-bold border-2 border-slate-100 rounded-2xl bg-slate-50 focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5 focus:bg-white transition-all outline-none"
             maxLength={1}
           />
         ))}
       </div>
 
       <div className="space-y-6 pt-4">
-        <Button 
+        <button 
           onClick={handleVerify}
-          disabled={otp.join('').length < 6 || isVerifying || isSuccess}
-          className="w-full h-14 rounded-2xl text-lg font-semibold bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25 relative overflow-hidden"
+          disabled={!isOtpComplete || isVerifying || isSuccess}
+          className={`w-full h-14 rounded-2xl text-lg font-semibold flex items-center justify-center transition-all shadow-lg ${
+            isOtpComplete && !isVerifying && !isSuccess
+              ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-600/25 cursor-pointer"
+              : "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
+          }`}
         >
           {isVerifying ? (
             <Loader2 className="w-6 h-6 animate-spin" />
@@ -106,17 +107,17 @@ export function OtpStep({ phoneNumber, onBack, onVerify }: OtpStepProps) {
           ) : (
             "Verify Account"
           )}
-        </Button>
+        </button>
 
         <div className="text-center">
           {timer > 0 ? (
             <p className="text-slate-400 text-sm font-medium">
-              Didn't receive code? Resend in <span className="text-primary font-bold">{timer}s</span>
+              Didn't receive code? Resend in <span className="text-blue-600 font-bold">{timer}s</span>
             </p>
           ) : (
             <button 
               onClick={resendOtp}
-              className="text-primary font-bold hover:underline"
+              className="text-blue-600 font-bold hover:underline"
             >
               Resend code
             </button>
