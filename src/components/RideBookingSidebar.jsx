@@ -20,7 +20,7 @@ const CAB_TIERS = [
     driver: {
       name: "Rajesh Kumar",
       avatar: "👨🏽‍✈️",
-      rating: "4.8",
+      rating: "4.18",
       car: "Suzuki Swift",
       plate: "DL 1RT 8832",
     },
