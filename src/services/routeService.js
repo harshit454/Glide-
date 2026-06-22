@@ -5,10 +5,19 @@ export const getRoute = async (start, end) => {
 
   const data = await res.json();
 
-  return data.routes[0].geometry.coordinates.map(
-    ([lng, lat]) => ({
-      lat,
-      lng,
-    })
-  );
+  if (!data.routes || !data.routes.length) {
+    throw new Error("No route found");
+  }
+
+  const route = data.routes[0];
+  const coordinates = route.geometry.coordinates.map(([lng, lat]) => ({
+    lat,
+    lng,
+  }));
+
+  return {
+    coordinates,
+    distance: route.distance, // in meters
+    duration: route.duration, // in seconds
+  };
 };

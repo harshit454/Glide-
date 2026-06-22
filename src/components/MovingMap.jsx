@@ -38,7 +38,7 @@ export default function MovingMap() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [route.length]);
 
   return (
     <MapContainer
