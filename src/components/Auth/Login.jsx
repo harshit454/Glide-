@@ -147,7 +147,7 @@ export default function Login({ onLogin }) {
         {/* Helper Instructions panel inside card */}
         <div className="mt-6 pt-4 border-t border-[#EDF2F7] text-center">
           <p className="text-[10px] text-[#A0AEC0] leading-normal font-medium">
-            💡 <strong>Testing Accounts:</strong><br />
+            💡 <span>Testing Accounts:</span><br />
             Admin Mode: <span className="text-[#7C3AED] font-semibold">admin@glide.com</span><br />
             Driver Mode: <span className="text-[#7C3AED] font-semibold">driver@glide.com</span><br />
             Rider Mode: <span className="text-[#7C3AED] font-semibold">any other email</span>

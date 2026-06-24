@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
+import AdminDashboard from "./pages/AdminDashboard";
+import DriverDashboard from "./pages/DriverDashboard";
 import Login from "./Auth/Login";
-import Dashboard from "../pages/Dashboard"; // Rider Dashboard
-import AdminDashboard from "../pages/AdminDashboard";
-import DriverDashboard from "../pages/DriverDashboard";
+import UserDashboard from "./pages/Dashboard";
 
 const INITIAL_CAB_TIERS = [
   {
@@ -267,17 +267,19 @@ const Main = () => {
           )}
 
           {user.role === "rider" && (
-            <Dashboard
+            <UserDashboard
               user={user}
               onLogout={handleLogout}
               cabTiers={cabTiers}
               activeTrip={activeTrip}
               onBookTrip={handleBookTrip}
               onCancelTrip={handleCancelTrip}
+            
             />
           )}
         </>
       ) : (
+        // <Login onLogin={handleLogin} />
         <Login onLogin={handleLogin} />
       )}
     </div>

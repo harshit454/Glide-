@@ -1,7 +1,9 @@
 import { useState } from "react";
-import InteractiveMap from "../frontend/Maps/InteractiveMap";
-import RideBookingSidebar from "../RideBookingSidebar";
+
+import RideBookingSidebar from "../Maps/RideBookingSidebar";
 import { getRoute } from "../../services/routeService";
+import InteractiveMap from "../Maps/InteractiveMap";
+
 
 export default function Dashboard({
   user,

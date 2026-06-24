@@ -1,5 +1,5 @@
 import { useState } from "react";
-import InteractiveMap from "../components/Maps/InteractiveMap";
+import InteractiveMap from "../Maps/InteractiveMap";
 
 export default function DriverDashboard({
   user,
